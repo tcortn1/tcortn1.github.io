@@ -1,0 +1,317 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Tom Corten · Applied ML & GenAI</title>
+<meta name="description" content="Applied ML and GenAI engineer with an econometrics background. Projects in RAG, multi-agent systems, Text2SQL and fine-tuning, each with a measurable evaluation.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+<style>
+:root {
+  color-scheme: light;
+  --bg: #fcfcfb; --surface: #ffffff; --border: #e6e5e0;
+  --text-primary: #0b0b0b; --text-secondary: #52514e; --text-muted: #6f6e69;
+  --accent: #2a78d6; --accent-soft: #e8f1fc;
+  --grid: #ecebe6;
+  --s1: #2a78d6; --s2: #eb6834; --s3: #1baf7a; --s4: #eda100;
+  --bar: #86b6ef; --bar-hi: #1c5cab; --bar-muted: #c9c8c2;
+  --badge-bg: #fff4dc; --badge-text: #7a5300;
+}
+@media (prefers-color-scheme: dark) {
+  :root:where(:not([data-theme="light"])) {
+    color-scheme: dark;
+    --bg: #141413; --surface: #1a1a19; --border: #2e2e2b;
+    --text-primary: #f0efec; --text-secondary: #c3c2b7; --text-muted: #9a998f;
+    --accent: #5598e7; --accent-soft: #1b2a3d;
+    --grid: #2a2a27;
+    --s1: #3987e5; --s2: #d95926; --s3: #199e70; --s4: #c98500;
+    --bar: #256abf; --bar-hi: #6da7ec; --bar-muted: #4a4a46;
+    --badge-bg: #3a2e12; --badge-text: #f2c766;
+  }
+}
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --bg: #141413; --surface: #1a1a19; --border: #2e2e2b;
+  --text-primary: #f0efec; --text-secondary: #c3c2b7; --text-muted: #9a998f;
+  --accent: #5598e7; --accent-soft: #1b2a3d;
+  --grid: #2a2a27;
+  --s1: #3987e5; --s2: #d95926; --s3: #199e70; --s4: #c98500;
+  --bar: #256abf; --bar-hi: #6da7ec; --bar-muted: #4a4a46;
+  --badge-bg: #3a2e12; --badge-text: #f2c766;
+}
+* { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body {
+  margin: 0; background: var(--bg); color: var(--text-primary);
+  font: 16px/1.6 Inter, system-ui, -apple-system, "Segoe UI", sans-serif;
+}
+a { color: var(--accent); text-decoration: none; }
+a:hover { text-decoration: underline; }
+.wrap { max-width: 860px; margin: 0 auto; padding: 0 16px; }
+
+header { padding: 72px 0 40px; }
+.eyebrow { font: 500 13px/1 "JetBrains Mono", monospace; color: var(--text-muted); letter-spacing: .04em; text-transform: uppercase; }
+h1 { font-size: clamp(32px, 6vw, 44px); line-height: 1.1; margin: 14px 0 16px; letter-spacing: -0.02em; }
+.lede { font-size: 19px; color: var(--text-secondary); max-width: 640px; margin: 0; }
+.links { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 24px; }
+.btn { display: inline-flex; align-items: center; gap: 8px; padding: 9px 16px; border: 1px solid var(--border);
+  border-radius: 8px; background: var(--surface); color: var(--text-primary); font-weight: 500; font-size: 15px; }
+.btn:hover { border-color: var(--accent); text-decoration: none; }
+.btn.primary { background: var(--accent); border-color: var(--accent); color: #fff; }
+.skills { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 28px; padding: 0; list-style: none; }
+.skills li { font-size: 13px; padding: 4px 10px; border-radius: 999px; background: var(--accent-soft); color: var(--text-primary); }
+
+h2 { font-size: 13px; font-family: "JetBrains Mono", monospace; font-weight: 500; text-transform: uppercase;
+  letter-spacing: .06em; color: var(--text-muted); margin: 56px 0 20px; }
+
+.project { background: var(--surface); border: 1px solid var(--border); border-radius: 14px; padding: 28px; margin-bottom: 24px; }
+.project-head { display: flex; justify-content: space-between; align-items: flex-start; gap: 16px; flex-wrap: wrap; }
+.project h3 { font-size: 22px; margin: 0; letter-spacing: -0.01em; }
+.tag { font-size: 13px; color: var(--text-muted); margin-top: 4px; }
+.badge { font-size: 12px; font-weight: 600; padding: 3px 10px; border-radius: 999px; background: var(--badge-bg); color: var(--badge-text); white-space: nowrap; }
+.problem { color: var(--text-secondary); margin: 16px 0 0; }
+.cols { display: grid; grid-template-columns: 1fr 200px; gap: 28px; margin-top: 20px; align-items: start; }
+.cols ul { margin: 0; padding-left: 18px; color: var(--text-secondary); }
+.cols li { margin-bottom: 6px; }
+.stat { border-left: 3px solid var(--accent); padding-left: 14px; }
+.stat .num { font-size: 34px; font-weight: 700; line-height: 1.1; letter-spacing: -0.02em; }
+.stat .lbl { font-size: 14px; color: var(--text-secondary); margin-top: 4px; }
+.stat + .stat { margin-top: 18px; }
+figure { margin: 24px 0 0; }
+figcaption { font-size: 13px; color: var(--text-muted); margin-top: 8px; }
+.shot { width: 100%; height: auto; max-height: 520px; object-fit: cover; object-position: top; border-radius: 10px; border: 1px solid var(--border); display: block; }
+.stack { font: 500 12.5px/1.5 "JetBrains Mono", monospace; color: var(--text-muted); margin-top: 20px; }
+.project-links { margin-top: 16px; display: flex; gap: 18px; flex-wrap: wrap; font-size: 15px; font-weight: 500; }
+.muted-link { color: var(--text-muted); }
+
+.chart { width: 100%; height: auto; display: block; overflow: visible; }
+.chart text { font: 12.5px Inter, system-ui, sans-serif; }
+.t-pri { fill: var(--text-primary); }
+.t-sec { fill: var(--text-secondary); }
+.t-mut { fill: var(--text-muted); }
+.grid { stroke: var(--grid); stroke-width: 1; }
+.line { fill: none; stroke-width: 2; stroke-linejoin: round; stroke-linecap: round; }
+.dot { stroke: var(--surface); stroke-width: 2; }
+.line.s1 { stroke: var(--s1); } .dot.s1, .sw.s1 { fill: var(--s1); background: var(--s1); }
+.line.s2 { stroke: var(--s2); } .dot.s2, .sw.s2 { fill: var(--s2); background: var(--s2); }
+.line.s3 { stroke: var(--s3); } .dot.s3, .sw.s3 { fill: var(--s3); background: var(--s3); }
+.line.s4 { stroke: var(--s4); } .dot.s4, .sw.s4 { fill: var(--s4); background: var(--s4); }
+.hover-pt { fill: transparent; }
+.hover-pt:hover { fill: var(--text-muted); fill-opacity: .25; }
+.bar { fill: var(--bar); } .bar-hi { fill: var(--bar-hi); } .bar-muted { fill: var(--bar-muted); }
+.hit:hover .bar, .hit:hover .bar-hi, .hit:hover .bar-muted { opacity: .8; }
+.legend { display: flex; flex-wrap: wrap; gap: 6px 16px; font-size: 13px; color: var(--text-secondary); margin-bottom: 8px; }
+.key { display: inline-flex; align-items: center; gap: 6px; }
+.sw { display: inline-block; width: 10px; height: 10px; border-radius: 3px; }
+.table-view { margin-top: 10px; font-size: 13px; color: var(--text-secondary); }
+.table-view summary { cursor: pointer; color: var(--text-muted); }
+.table-view table { border-collapse: collapse; margin-top: 8px; width: 100%; }
+.table-view th, .table-view td { text-align: right; padding: 4px 8px; border-bottom: 1px solid var(--border); }
+.table-view th:first-child, .table-view td:first-child { text-align: left; }
+
+.also { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.mini { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 20px; }
+.mini h4 { margin: 0 0 6px; font-size: 16px; }
+.mini p { margin: 0 0 10px; color: var(--text-secondary); font-size: 15px; }
+
+.principles { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+.principles div { border-top: 2px solid var(--border); padding-top: 14px; }
+.principles strong { display: block; margin-bottom: 6px; }
+.principles p { margin: 0; color: var(--text-secondary); font-size: 15px; }
+
+footer { margin: 72px 0 48px; padding-top: 24px; border-top: 1px solid var(--border); color: var(--text-muted); font-size: 14px;
+  display: flex; justify-content: space-between; flex-wrap: wrap; gap: 12px; }
+
+@media (max-width: 720px) {
+  header { padding-top: 48px; }
+  .project { padding: 20px; }
+  .cols, .also, .principles { grid-template-columns: 1fr; }
+  .cols { gap: 20px; }
+  .stats-row { display: flex; gap: 24px; flex-wrap: wrap; }
+  .stat + .stat { margin-top: 0; }
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <div class="eyebrow">Applied ML · GenAI · Econometrics</div>
+  <h1>Tom Corten</h1>
+  <p class="lede">I build GenAI systems that can be measured. Every project below ships with an evaluation and a
+  number that says whether it works, from RAG and multi-agent systems to fine-tuning and Text2SQL.
+  Trained as an econometrician, based in the Netherlands.</p>
+  <div class="links">
+    <a class="btn primary" href="https://github.com/tcortn1">GitHub</a>
+    <!-- add LinkedIn / CV / email here -->
+  </div>
+  <ul class="skills">
+    <li>RAG</li><li>Multi-agent systems</li><li>Text2SQL</li><li>Fine-tuning (QLoRA, PEFT)</li>
+    <li>LLM evaluation</li><li>Databricks · MLflow · DSPy</li><li>Econometrics & credit risk</li>
+  </ul>
+</header>
+
+<main>
+<h2>Selected work</h2>
+
+<article class="project" id="lending-genie-bench">
+  <div class="project-head">
+    <div>
+      <h3>Lending Genie Bench</h3>
+      <div class="tag">Text2SQL · Databricks · DSPy · MLflow</div>
+    </div>
+    <span class="badge">In progress</span>
+  </div>
+  <p class="problem">Credit analysts ask questions like "which origination quarter defaults fastest?". Answering them
+  correctly takes the right tables, the right metric definitions (PAR30, vintage, roll rate) and SQL that respects them.
+  This project benchmarks Text2SQL approaches against Databricks Genie on a realistic lending portfolio.</p>
+  <div class="cols">
+    <ul>
+      <li><strong>Simulated lender with real statistical structure:</strong> a latent-logit default model with unobserved
+        heterogeneity, an arrears Markov chain and sector macro shocks. No random rows.</li>
+      <li><strong>Lakeflow pipeline</strong> (bronze → silver → gold) with business descriptions on every column, feeding
+        both Genie and the agent.</li>
+      <li><strong>DSPy agent</strong>: retrieve schema and definitions, generate SQL, enforce read-only guardrails,
+        self-correct on errors. Served through MLflow.</li>
+      <li><strong>Benchmark</strong>: 40 held-out questions scored on execution accuracy across 5 variants, including
+        DSPy-optimised prompts and Genie.</li>
+    </ul>
+    <div class="stats-row">
+      <div class="stat"><div class="num">40</div><div class="lbl">gold questions, easy to hard</div></div>
+      <div class="stat"><div class="num">5</div><div class="lbl">variants compared, incl. Genie</div></div>
+    </div>
+  </div>
+  <figure>
+    <div class="legend"><span class="key"><i class="sw s1"></i>2022-Q2 <span class="t-mut">(348 loans)</span></span><span class="key"><i class="sw s2"></i>2023-Q4 <span class="t-mut">(413 loans)</span></span><span class="key"><i class="sw s3"></i>2024-Q2 <span class="t-mut">(354 loans)</span></span><span class="key"><i class="sw s4"></i>2025-Q1 <span class="t-mut">(367 loans)</span></span></div><svg viewBox="0 0 640 300" role="img" class="chart" aria-label="Cumulative default rate by months on book for four origination cohorts"><line x1="44" x2="562" y1="264.0" y2="264.0" class="grid"/><text x="36" y="268.0" text-anchor="end" class="t-mut">0%</text><line x1="44" x2="562" y1="202.0" y2="202.0" class="grid"/><text x="36" y="206.0" text-anchor="end" class="t-mut">2%</text><line x1="44" x2="562" y1="140.0" y2="140.0" class="grid"/><text x="36" y="144.0" text-anchor="end" class="t-mut">4%</text><line x1="44" x2="562" y1="78.0" y2="78.0" class="grid"/><text x="36" y="82.0" text-anchor="end" class="t-mut">6%</text><line x1="44" x2="562" y1="16.0" y2="16.0" class="grid"/><text x="36" y="20.0" text-anchor="end" class="t-mut">8%</text><text x="44.0" y="286" text-anchor="middle" class="t-mut">0</text><text x="173.5" y="286" text-anchor="middle" class="t-mut">6</text><text x="303.0" y="286" text-anchor="middle" class="t-mut">12</text><text x="432.5" y="286" text-anchor="middle" class="t-mut">18</text><text x="562.0" y="286" text-anchor="middle" class="t-mut">24</text><text x="303.0" y="300" text-anchor="middle" class="t-mut">months on book</text><polyline points="44.0,264.0 65.6,264.0 87.2,264.0 108.8,264.0 130.3,228.3 151.9,183.7 173.5,148.1 195.1,148.1 216.7,130.4 238.2,121.4 259.8,121.4 281.4,121.4 303.0,112.4 324.6,112.4 346.2,112.4 367.8,112.4 389.3,103.7 410.9,103.7 432.5,94.7 454.1,94.7 475.7,94.7 497.2,94.7 518.8,94.7 540.4,94.7 562.0,94.7" class="line s1"/><circle cx="562.0" cy="94.7" r="4" class="dot s1"/><text x="570.0" y="98.7" class="t-sec">2022-Q2</text><circle cx="65.6" cy="264.0" r="7" class="hover-pt"><title>2022-Q2, month 1: 0.0% cumulative default</title></circle><circle cx="87.2" cy="264.0" r="7" class="hover-pt"><title>2022-Q2, month 2: 0.0% cumulative default</title></circle><circle cx="108.8" cy="264.0" r="7" class="hover-pt"><title>2022-Q2, month 3: 0.0% cumulative default</title></circle><circle cx="130.3" cy="228.3" r="7" class="hover-pt"><title>2022-Q2, month 4: 1.1% cumulative default</title></circle><circle cx="151.9" cy="183.7" r="7" class="hover-pt"><title>2022-Q2, month 5: 2.6% cumulative default</title></circle><circle cx="173.5" cy="148.1" r="7" class="hover-pt"><title>2022-Q2, month 6: 3.7% cumulative default</title></circle><circle cx="195.1" cy="148.1" r="7" class="hover-pt"><title>2022-Q2, month 7: 3.7% cumulative default</title></circle><circle cx="216.7" cy="130.4" r="7" class="hover-pt"><title>2022-Q2, month 8: 4.3% cumulative default</title></circle><circle cx="238.2" cy="121.4" r="7" class="hover-pt"><title>2022-Q2, month 9: 4.6% cumulative default</title></circle><circle cx="259.8" cy="121.4" r="7" class="hover-pt"><title>2022-Q2, month 10: 4.6% cumulative default</title></circle><circle cx="281.4" cy="121.4" r="7" class="hover-pt"><title>2022-Q2, month 11: 4.6% cumulative default</title></circle><circle cx="303.0" cy="112.4" r="7" class="hover-pt"><title>2022-Q2, month 12: 4.9% cumulative default</title></circle><circle cx="324.6" cy="112.4" r="7" class="hover-pt"><title>2022-Q2, month 13: 4.9% cumulative default</title></circle><circle cx="346.2" cy="112.4" r="7" class="hover-pt"><title>2022-Q2, month 14: 4.9% cumulative default</title></circle><circle cx="367.8" cy="112.4" r="7" class="hover-pt"><title>2022-Q2, month 15: 4.9% cumulative default</title></circle><circle cx="389.3" cy="103.7" r="7" class="hover-pt"><title>2022-Q2, month 16: 5.2% cumulative default</title></circle><circle cx="410.9" cy="103.7" r="7" class="hover-pt"><title>2022-Q2, month 17: 5.2% cumulative default</title></circle><circle cx="432.5" cy="94.7" r="7" class="hover-pt"><title>2022-Q2, month 18: 5.5% cumulative default</title></circle><circle cx="454.1" cy="94.7" r="7" class="hover-pt"><title>2022-Q2, month 19: 5.5% cumulative default</title></circle><circle cx="475.7" cy="94.7" r="7" class="hover-pt"><title>2022-Q2, month 20: 5.5% cumulative default</title></circle><circle cx="497.2" cy="94.7" r="7" class="hover-pt"><title>2022-Q2, month 21: 5.5% cumulative default</title></circle><circle cx="518.8" cy="94.7" r="7" class="hover-pt"><title>2022-Q2, month 22: 5.5% cumulative default</title></circle><circle cx="540.4" cy="94.7" r="7" class="hover-pt"><title>2022-Q2, month 23: 5.5% cumulative default</title></circle><circle cx="562.0" cy="94.7" r="7" class="hover-pt"><title>2022-Q2, month 24: 5.5% cumulative default</title></circle><polyline points="44.0,264.0 65.6,264.0 87.2,264.0 108.8,264.0 130.3,249.1 151.9,233.9 173.5,211.6 195.1,203.9 216.7,203.9 238.2,196.4 259.8,196.4 281.4,189.0 303.0,181.5 324.6,181.5 346.2,181.5 367.8,181.5 389.3,181.5 410.9,181.5 432.5,173.8 454.1,173.8 475.7,158.9 497.2,158.9 518.8,158.9 540.4,158.9 562.0,151.5" class="line s2"/><circle cx="562.0" cy="151.5" r="4" class="dot s2"/><text x="570.0" y="155.5" class="t-sec">2023-Q4</text><circle cx="65.6" cy="264.0" r="7" class="hover-pt"><title>2023-Q4, month 1: 0.0% cumulative default</title></circle><circle cx="87.2" cy="264.0" r="7" class="hover-pt"><title>2023-Q4, month 2: 0.0% cumulative default</title></circle><circle cx="108.8" cy="264.0" r="7" class="hover-pt"><title>2023-Q4, month 3: 0.0% cumulative default</title></circle><circle cx="130.3" cy="249.1" r="7" class="hover-pt"><title>2023-Q4, month 4: 0.5% cumulative default</title></circle><circle cx="151.9" cy="233.9" r="7" class="hover-pt"><title>2023-Q4, month 5: 1.0% cumulative default</title></circle><circle cx="173.5" cy="211.6" r="7" class="hover-pt"><title>2023-Q4, month 6: 1.7% cumulative default</title></circle><circle cx="195.1" cy="203.9" r="7" class="hover-pt"><title>2023-Q4, month 7: 1.9% cumulative default</title></circle><circle cx="216.7" cy="203.9" r="7" class="hover-pt"><title>2023-Q4, month 8: 1.9% cumulative default</title></circle><circle cx="238.2" cy="196.4" r="7" class="hover-pt"><title>2023-Q4, month 9: 2.2% cumulative default</title></circle><circle cx="259.8" cy="196.4" r="7" class="hover-pt"><title>2023-Q4, month 10: 2.2% cumulative default</title></circle><circle cx="281.4" cy="189.0" r="7" class="hover-pt"><title>2023-Q4, month 11: 2.4% cumulative default</title></circle><circle cx="303.0" cy="181.5" r="7" class="hover-pt"><title>2023-Q4, month 12: 2.7% cumulative default</title></circle><circle cx="324.6" cy="181.5" r="7" class="hover-pt"><title>2023-Q4, month 13: 2.7% cumulative default</title></circle><circle cx="346.2" cy="181.5" r="7" class="hover-pt"><title>2023-Q4, month 14: 2.7% cumulative default</title></circle><circle cx="367.8" cy="181.5" r="7" class="hover-pt"><title>2023-Q4, month 15: 2.7% cumulative default</title></circle><circle cx="389.3" cy="181.5" r="7" class="hover-pt"><title>2023-Q4, month 16: 2.7% cumulative default</title></circle><circle cx="410.9" cy="181.5" r="7" class="hover-pt"><title>2023-Q4, month 17: 2.7% cumulative default</title></circle><circle cx="432.5" cy="173.8" r="7" class="hover-pt"><title>2023-Q4, month 18: 2.9% cumulative default</title></circle><circle cx="454.1" cy="173.8" r="7" class="hover-pt"><title>2023-Q4, month 19: 2.9% cumulative default</title></circle><circle cx="475.7" cy="158.9" r="7" class="hover-pt"><title>2023-Q4, month 20: 3.4% cumulative default</title></circle><circle cx="497.2" cy="158.9" r="7" class="hover-pt"><title>2023-Q4, month 21: 3.4% cumulative default</title></circle><circle cx="518.8" cy="158.9" r="7" class="hover-pt"><title>2023-Q4, month 22: 3.4% cumulative default</title></circle><circle cx="540.4" cy="158.9" r="7" class="hover-pt"><title>2023-Q4, month 23: 3.4% cumulative default</title></circle><circle cx="562.0" cy="151.5" r="7" class="hover-pt"><title>2023-Q4, month 24: 3.6% cumulative default</title></circle><polyline points="44.0,264.0 65.6,264.0 87.2,264.0 108.8,264.0 130.3,220.3 151.9,185.3 173.5,176.6 195.1,167.6 216.7,167.6 238.2,158.9 259.8,123.9 281.4,97.5 303.0,80.2 324.6,71.5 346.2,71.5 367.8,71.5 389.3,71.5 410.9,62.5 432.5,62.5 454.1,62.5 475.7,53.8 497.2,53.8 518.8,53.8 540.4,53.8 562.0,45.1" class="line s3"/><circle cx="562.0" cy="45.1" r="4" class="dot s3"/><text x="570.0" y="49.1" class="t-sec">2024-Q2</text><circle cx="65.6" cy="264.0" r="7" class="hover-pt"><title>2024-Q2, month 1: 0.0% cumulative default</title></circle><circle cx="87.2" cy="264.0" r="7" class="hover-pt"><title>2024-Q2, month 2: 0.0% cumulative default</title></circle><circle cx="108.8" cy="264.0" r="7" class="hover-pt"><title>2024-Q2, month 3: 0.0% cumulative default</title></circle><circle cx="130.3" cy="220.3" r="7" class="hover-pt"><title>2024-Q2, month 4: 1.4% cumulative default</title></circle><circle cx="151.9" cy="185.3" r="7" class="hover-pt"><title>2024-Q2, month 5: 2.5% cumulative default</title></circle><circle cx="173.5" cy="176.6" r="7" class="hover-pt"><title>2024-Q2, month 6: 2.8% cumulative default</title></circle><circle cx="195.1" cy="167.6" r="7" class="hover-pt"><title>2024-Q2, month 7: 3.1% cumulative default</title></circle><circle cx="216.7" cy="167.6" r="7" class="hover-pt"><title>2024-Q2, month 8: 3.1% cumulative default</title></circle><circle cx="238.2" cy="158.9" r="7" class="hover-pt"><title>2024-Q2, month 9: 3.4% cumulative default</title></circle><circle cx="259.8" cy="123.9" r="7" class="hover-pt"><title>2024-Q2, month 10: 4.5% cumulative default</title></circle><circle cx="281.4" cy="97.5" r="7" class="hover-pt"><title>2024-Q2, month 11: 5.4% cumulative default</title></circle><circle cx="303.0" cy="80.2" r="7" class="hover-pt"><title>2024-Q2, month 12: 5.9% cumulative default</title></circle><circle cx="324.6" cy="71.5" r="7" class="hover-pt"><title>2024-Q2, month 13: 6.2% cumulative default</title></circle><circle cx="346.2" cy="71.5" r="7" class="hover-pt"><title>2024-Q2, month 14: 6.2% cumulative default</title></circle><circle cx="367.8" cy="71.5" r="7" class="hover-pt"><title>2024-Q2, month 15: 6.2% cumulative default</title></circle><circle cx="389.3" cy="71.5" r="7" class="hover-pt"><title>2024-Q2, month 16: 6.2% cumulative default</title></circle><circle cx="410.9" cy="62.5" r="7" class="hover-pt"><title>2024-Q2, month 17: 6.5% cumulative default</title></circle><circle cx="432.5" cy="62.5" r="7" class="hover-pt"><title>2024-Q2, month 18: 6.5% cumulative default</title></circle><circle cx="454.1" cy="62.5" r="7" class="hover-pt"><title>2024-Q2, month 19: 6.5% cumulative default</title></circle><circle cx="475.7" cy="53.8" r="7" class="hover-pt"><title>2024-Q2, month 20: 6.8% cumulative default</title></circle><circle cx="497.2" cy="53.8" r="7" class="hover-pt"><title>2024-Q2, month 21: 6.8% cumulative default</title></circle><circle cx="518.8" cy="53.8" r="7" class="hover-pt"><title>2024-Q2, month 22: 6.8% cumulative default</title></circle><circle cx="540.4" cy="53.8" r="7" class="hover-pt"><title>2024-Q2, month 23: 6.8% cumulative default</title></circle><circle cx="562.0" cy="45.1" r="7" class="hover-pt"><title>2024-Q2, month 24: 7.1% cumulative default</title></circle><polyline points="44.0,264.0 65.6,264.0 87.2,264.0 108.8,264.0 130.3,247.3 151.9,221.8 173.5,204.8 195.1,171.0 216.7,162.6 238.2,162.6 259.8,128.8 281.4,128.8 303.0,120.5 324.6,112.1 346.2,112.1 367.8,103.4 389.3,95.0 410.9,86.7 432.5,86.7" class="line s4"/><circle cx="432.5" cy="86.7" r="4" class="dot s4"/><text x="440.5" y="90.7" class="t-sec">2025-Q1</text><circle cx="65.6" cy="264.0" r="7" class="hover-pt"><title>2025-Q1, month 1: 0.0% cumulative default</title></circle><circle cx="87.2" cy="264.0" r="7" class="hover-pt"><title>2025-Q1, month 2: 0.0% cumulative default</title></circle><circle cx="108.8" cy="264.0" r="7" class="hover-pt"><title>2025-Q1, month 3: 0.0% cumulative default</title></circle><circle cx="130.3" cy="247.3" r="7" class="hover-pt"><title>2025-Q1, month 4: 0.5% cumulative default</title></circle><circle cx="151.9" cy="221.8" r="7" class="hover-pt"><title>2025-Q1, month 5: 1.4% cumulative default</title></circle><circle cx="173.5" cy="204.8" r="7" class="hover-pt"><title>2025-Q1, month 6: 1.9% cumulative default</title></circle><circle cx="195.1" cy="171.0" r="7" class="hover-pt"><title>2025-Q1, month 7: 3.0% cumulative default</title></circle><circle cx="216.7" cy="162.6" r="7" class="hover-pt"><title>2025-Q1, month 8: 3.3% cumulative default</title></circle><circle cx="238.2" cy="162.6" r="7" class="hover-pt"><title>2025-Q1, month 9: 3.3% cumulative default</title></circle><circle cx="259.8" cy="128.8" r="7" class="hover-pt"><title>2025-Q1, month 10: 4.4% cumulative default</title></circle><circle cx="281.4" cy="128.8" r="7" class="hover-pt"><title>2025-Q1, month 11: 4.4% cumulative default</title></circle><circle cx="303.0" cy="120.5" r="7" class="hover-pt"><title>2025-Q1, month 12: 4.6% cumulative default</title></circle><circle cx="324.6" cy="112.1" r="7" class="hover-pt"><title>2025-Q1, month 13: 4.9% cumulative default</title></circle><circle cx="346.2" cy="112.1" r="7" class="hover-pt"><title>2025-Q1, month 14: 4.9% cumulative default</title></circle><circle cx="367.8" cy="103.4" r="7" class="hover-pt"><title>2025-Q1, month 15: 5.2% cumulative default</title></circle><circle cx="389.3" cy="95.0" r="7" class="hover-pt"><title>2025-Q1, month 16: 5.5% cumulative default</title></circle><circle cx="410.9" cy="86.7" r="7" class="hover-pt"><title>2025-Q1, month 17: 5.7% cumulative default</title></circle><circle cx="432.5" cy="86.7" r="7" class="hover-pt"><title>2025-Q1, month 18: 5.7% cumulative default</title></circle></svg><details class="table-view"><summary>Show as table</summary><table><thead><tr><th>Cohort</th><th>Loans</th><th>6m %</th><th>12m %</th><th>18m %</th><th>24m %</th></tr></thead><tbody><tr><td>2022-Q2</td><td>348</td><td>3.74</td><td>4.89</td><td>5.46</td><td>5.46</td></tr><tr><td>2023-Q4</td><td>413</td><td>1.69</td><td>2.66</td><td>2.91</td><td>3.63</td></tr><tr><td>2024-Q2</td><td>354</td><td>2.82</td><td>5.93</td><td>6.5</td><td>7.06</td></tr><tr><td>2025-Q1</td><td>367</td><td>1.91</td><td>4.63</td><td>5.72</td><td>–</td></tr></tbody></table></details>
+    <figcaption>Cumulative default rate by months on book for four simulated origination cohorts, from the pipeline's
+    <code>gold_vintage_curves</code> table. Cohorts exposed to the simulated 2025 construction downturn default faster.</figcaption>
+  </figure>
+  <div class="stack">Lakeflow Declarative Pipelines · Unity Catalog · DSPy · MLflow · Model Serving · Asset Bundles · DuckDB · sqlglot</div>
+  <div class="project-links"><span class="muted-link">Code and benchmark results are published once the first full run is complete</span></div>
+</article>
+
+<article class="project" id="agentic-security-lab">
+  <div class="project-head">
+    <div>
+      <h3>Agentic Security Lab</h3>
+      <div class="tag">Multi-agent · evaluation · safety by design</div>
+    </div>
+  </div>
+  <p class="problem">Can an LLM agent find vulnerabilities it was never programmed to look for, without being trusted
+  on its word? This multi-agent loop runs against isolated Docker labs, and every finding has to be confirmed by code.</p>
+  <div class="cols">
+    <ul>
+      <li><strong>Orchestrated agents</strong> (recon, planner, validator) over a policy-bounded tool layer; only
+        allowlisted local targets can be reached.</li>
+      <li><strong>Two strategies, one benchmark:</strong> a deterministic heuristic planner vs. an LLM exploration agent.</li>
+      <li><strong>Findings are only accepted on a discriminating signal</strong>; a 200 status or a generic success
+        field is rejected as proof.</li>
+      <li>Execution-trace dashboard, Markdown reports, 69 tests.</li>
+    </ul>
+    <div class="stats-row">
+      <div class="stat"><div class="num">3/3</div><div class="lbl">unseen vulnerability classes confirmed by the LLM agent</div></div>
+      <div class="stat"><div class="num">0/3</div><div class="lbl">for the heuristic planner on the same lab</div></div>
+    </div>
+  </div>
+  <figure>
+    <img class="shot" src="assets/pentest-live.jpg" alt="Dashboard showing the LLM agent's reasoning, its policy-bounded HTTP requests and code-confirmed findings" loading="lazy" width="1028" height="1106">
+    <figcaption>Live run with GPT-4o-mini: the agent's reasoning, its bounded actions and the code-verified findings.</figcaption>
+  </figure>
+  <div class="stack">Python · FastAPI · Docker · OpenAI / Anthropic · SQLite</div>
+  <div class="project-links"><a href="https://github.com/tcortn1/ai-pentest-agent">Code on GitHub →</a></div>
+</article>
+
+<article class="project" id="finetune-benchmark">
+  <div class="project-head">
+    <div>
+      <h3>Fine-tune &amp; quantization benchmark</h3>
+      <div class="tag">QLoRA · GGUF · deployment trade-offs</div>
+    </div>
+  </div>
+  <p class="problem">Which model should you actually deploy? I fine-tuned Mistral 7B for financial sentiment
+  extraction, then mapped the accuracy vs. size vs. speed trade-off across five quantization levels.</p>
+  <div class="cols">
+    <ul>
+      <li>QLoRA (4-bit NF4, r=16) on ~3,100 labelled financial news sentences, about 4 minutes on one A100.</li>
+      <li>Quantized to GGUF from Q8_0 down to Q3_K_M; every variant evaluated on the same 346-example held-out set.</li>
+      <li>Measured accuracy, macro F1, latency, throughput and size; served the winner through an API.</li>
+    </ul>
+    <div class="stats-row">
+      <div class="stat"><div class="num">52→94.5%</div><div class="lbl">accuracy after fine-tuning</div></div>
+      <div class="stat"><div class="num">4×</div><div class="lbl">throughput at Q4_K_M, at 30% of the size</div></div>
+    </div>
+  </div>
+  <figure>
+    <svg viewBox="0 0 640 246" role="img" aria-label="Model size per variant; accuracy stays at 94% down to 3.3 GB" class="chart"><text x="0" y="20" class="t-sec">Base Mistral 7B (no fine-tune)</text><g class="hit"><title>14.5 GB · 52.3% acc · 35 tok/s</title><rect x="230" y="0" width="410" height="34" fill="transparent"/><rect x="230" y="8" width="260.0" height="14" rx="4" class="bar-muted"/></g><text x="498.0" y="20" class="t-pri">14.5 GB <tspan class='t-mut'>· 52.3%</tspan></text><text x="0" y="54" class="t-sec">Fine-tuned fp16</text><g class="hit"><title>13.5 GB · 94.5% acc · 34 tok/s</title><rect x="230" y="34" width="410" height="34" fill="transparent"/><rect x="230" y="42" width="242.1" height="14" rx="4" class="bar"/></g><text x="480.1" y="54" class="t-pri">13.5 GB <tspan class='t-mut'>· 94.5%</tspan></text><text x="0" y="88" class="t-sec">GGUF Q8_0</text><g class="hit"><title>7.2 GB · 94.2% acc · 122 tok/s</title><rect x="230" y="68" width="410" height="34" fill="transparent"/><rect x="230" y="76" width="129.1" height="14" rx="4" class="bar"/></g><text x="367.1" y="88" class="t-pri">7.2 GB <tspan class='t-mut'>· 94.2%</tspan></text><text x="0" y="122" class="t-sec">GGUF Q6_K</text><g class="hit"><title>5.5 GB · 94.2% acc · 104 tok/s</title><rect x="230" y="102" width="410" height="34" fill="transparent"/><rect x="230" y="110" width="98.6" height="14" rx="4" class="bar"/></g><text x="336.6" y="122" class="t-pri">5.5 GB <tspan class='t-mut'>· 94.2%</tspan></text><text x="0" y="156" class="t-sec">GGUF Q5_K_M</text><g class="hit"><title>4.8 GB · 94.2% acc · 125 tok/s</title><rect x="230" y="136" width="410" height="34" fill="transparent"/><rect x="230" y="144" width="86.1" height="14" rx="4" class="bar"/></g><text x="324.1" y="156" class="t-pri">4.8 GB <tspan class='t-mut'>· 94.2%</tspan></text><text x="0" y="190" class="t-sec">GGUF Q4_K_M</text><g class="hit"><title>4.1 GB · 94.5% acc · 138 tok/s</title><rect x="230" y="170" width="410" height="34" fill="transparent"/><rect x="230" y="178" width="73.5" height="14" rx="4" class="bar-hi"/></g><text x="311.5" y="190" class="t-pri">4.1 GB <tspan class='t-mut'>· 94.5%</tspan></text><text x="0" y="224" class="t-sec">GGUF Q3_K_M</text><g class="hit"><title>3.3 GB · 94.5% acc · 111 tok/s</title><rect x="230" y="204" width="410" height="34" fill="transparent"/><rect x="230" y="212" width="59.2" height="14" rx="4" class="bar"/></g><text x="297.2" y="224" class="t-pri">3.3 GB <tspan class='t-mut'>· 94.5%</tspan></text></svg>
+    <figcaption>Model size per variant, with accuracy in grey. Accuracy holds at ~94% all the way down to 3.3 GB;
+    Q4_K_M (dark) is the sweet spot.</figcaption>
+  </figure>
+  <div class="stack">PyTorch · Hugging Face (transformers, PEFT, TRL) · llama.cpp · Docker · GitHub Actions</div>
+  <div class="project-links"><a href="https://github.com/tcortn1/llm-finetune-benchmark">Code on GitHub →</a></div>
+</article>
+
+<article class="project" id="surprise-memory">
+  <div class="project-head">
+    <div>
+      <h3>Surprise-gated agent memory</h3>
+      <div class="tag">RAG · agent memory · evaluation</div>
+    </div>
+  </div>
+  <p class="problem">Store-everything memory bloats over time and fills up with outdated, contradicting facts. This
+  memory layer only writes what is new or contradictory, and updates its beliefs instead of piling them up.</p>
+  <div class="cols">
+    <ul>
+      <li>Four gates: an LLM noise filter, NLI-based contradiction detection, embedding novelty and belief strength.</li>
+      <li>Confirmations reinforce a belief; contradictions decay it until it is deprecated.</li>
+      <li>Evaluated on LoCoMo: 10 long conversations, 1,980 questions.</li>
+    </ul>
+    <div class="stats-row">
+      <div class="stat"><div class="num">88%</div><div class="lbl">smaller memory store</div></div>
+      <div class="stat"><div class="num">Same</div><div class="lbl">answer quality (F1 0.209 vs 0.203)</div></div>
+    </div>
+  </div>
+  <figure>
+    <svg viewBox="0 0 640 76" role="img" aria-label="Average memory store size and generation F1 on LoCoMo" class="chart"><text x="0" y="20" class="t-sec">Store everything</text><g class="hit"><title>588 entries · F1 0.203</title><rect x="230" y="0" width="410" height="34" fill="transparent"/><rect x="230" y="8" width="260.0" height="14" rx="4" class="bar"/></g><text x="498.0" y="20" class="t-pri">588 entries <tspan class='t-mut'>· F1 0.203</tspan></text><text x="0" y="54" class="t-sec">Surprise-gated</text><g class="hit"><title>70.6 entries · F1 0.209</title><rect x="230" y="34" width="410" height="34" fill="transparent"/><rect x="230" y="42" width="31.2" height="14" rx="4" class="bar-hi"/></g><text x="269.2" y="54" class="t-pri">70.6 entries <tspan class='t-mut'>· F1 0.209</tspan></text></svg>
+    <figcaption>Average store size on LoCoMo, with generation F1 in grey.</figcaption>
+  </figure>
+  <div class="stack">sentence-transformers · DeBERTa NLI · ChromaDB · OpenAI</div>
+  <div class="project-links"><a href="https://github.com/tcortn1/surprise-memory">Code on GitHub →</a></div>
+</article>
+
+<h2>Also</h2>
+<div class="also">
+  <div class="mini">
+    <h4>Citation-locked policy RAG</h4>
+    <p>RAG over open Dutch government policy PDFs. Answers must cite their source chunks; a similarity gate refuses
+    out-of-corpus questions, and every query lands in an audit log.</p>
+    <a href="https://github.com/tcortn1/policy-rag-poc">Code →</a>
+  </div>
+  <div class="mini">
+    <h4>Dutch news → structured JSON</h4>
+    <p>RSS ingest into SQLite, LLM-assisted labelling, then a LoRA fine-tune of a small instruct model that extracts a
+    fixed JSON schema from Dutch news, served through FastAPI.</p>
+    <a href="https://github.com/tcortn1/nl-news-lora-extract">Code →</a>
+  </div>
+</div>
+
+<h2>How I work</h2>
+<div class="principles">
+  <div><strong>Evaluate first</strong><p>A system without a benchmark is a demo. I define the metric and the test set
+  before tuning prompts or models.</p></div>
+  <div><strong>Trust, but verify</strong><p>LLM output is checked by code wherever it matters: guardrails, verified
+  findings, citation locks.</p></div>
+  <div><strong>Business terms</strong><p>An econometrics background means I care what a number means to the
+  person deciding on it, not just whether it went up.</p></div>
+</div>
+</main>
+
+<footer>
+  <span>Tom Corten · Netherlands</span>
+  <a href="https://github.com/tcortn1">github.com/tcortn1</a>
+</footer>
+
+</div>
+</body>
+</html>
