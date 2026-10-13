@@ -21,6 +21,8 @@ FINETUNE = [  # variant, size GB, accuracy %, tok/s
 ]
 MEMORY = [("Store everything", 588, 0.203), ("Surprise-gated", 70.6, 0.209)]
 VINTAGE_SERIES = ["2022-Q2", "2023-Q4", "2024-Q2", "2025-Q1"]
+# engine, accuracy without / with semantic layer (%), from lending-genie-bench eval/analysis
+TEXT2SQL = [("DSPy agent (Haiku 4.5)", 72.5, 90.0), ("Databricks Genie", 57.5, 87.5)]
 
 
 def bar_chart(rows, value_max, label_fn, highlight=None, muted=None, title=""):
@@ -82,6 +84,38 @@ def vintage_chart(data):
     return f'<div class="legend">{legend}</div>' + "".join(parts) + table
 
 
+def dumbbell_chart(rows):
+    """Accuracy without -> with the semantic layer, one row per engine."""
+    width, label_w, right, row_h, top = 640, 190, 24, 56, 30
+    pw = width - label_w - right
+    height = top + row_h * len(rows) + 28
+    x = lambda v: label_w + pw * (v - 50) / 50
+    parts = [f'<svg viewBox="0 0 {width} {height}" role="img" class="chart" '
+             f'aria-label="Execution accuracy without and with a semantic layer, per engine">']
+    for v in (50, 60, 70, 80, 90, 100):
+        parts.append(f'<line x1="{x(v):.1f}" x2="{x(v):.1f}" y1="{top - 10}" y2="{height - 24}" class="grid"/>')
+        parts.append(f'<text x="{x(v):.1f}" y="{height - 6}" text-anchor="middle" class="t-mut">{v}%</text>')
+    for i, (name, before, after) in enumerate(rows):
+        y = top + i * row_h + 14
+        parts.append(f'<text x="0" y="{y + 4}" class="t-sec">{escape(name)}</text>')
+        parts.append(f'<line x1="{x(before):.1f}" x2="{x(after):.1f}" y1="{y}" y2="{y}" class="link"/>')
+        for v, cls, label in ((before, "s-before", "without"), (after, "s-after", "with")):
+            parts.append(f'<g class="hit"><title>{escape(name)}, {label} semantic layer: {v:g}%</title>'
+                         f'<circle cx="{x(v):.1f}" cy="{y}" r="12" fill="transparent"/>'
+                         f'<circle cx="{x(v):.1f}" cy="{y}" r="7" class="dot {cls}"/></g>')
+        parts.append(f'<text x="{x(before):.1f}" y="{y - 14}" text-anchor="middle" class="t-mut">{before:g}%</text>')
+        parts.append(f'<text x="{x(after):.1f}" y="{y - 14}" text-anchor="middle" class="t-pri">{after:g}%</text>')
+    parts.append("</svg>")
+    legend = ('<div class="legend"><span class="key"><i class="sw s-before"></i>tables + column comments only</span>'
+              '<span class="key"><i class="sw s-after"></i>+ metric glossary and 20 example queries</span></div>')
+    table_rows = "".join(f"<tr><td>{escape(n)}</td><td>{b:g}%</td><td>{a:g}%</td><td>+{a - b:g} pp</td></tr>"
+                         for n, b, a in rows)
+    table = ('<details class="table-view"><summary>Show as table</summary><table><thead><tr><th>Engine</th>'
+             '<th>Without</th><th>With</th><th>Gain</th></tr></thead>'
+             f"<tbody>{table_rows}</tbody></table></details>")
+    return legend + "".join(parts) + table
+
+
 def main():
     vintage = json.loads((ROOT / "assets" / "vintage.json").read_text())
     finetune = bar_chart(
@@ -97,6 +131,7 @@ def main():
         highlight="Surprise-gated", title="Average memory store size and generation F1 on LoCoMo")
     html = (ROOT / "template.html").read_text()
     html = (html.replace("{{VINTAGE_CHART}}", vintage_chart(vintage))
+                .replace("{{TEXT2SQL_CHART}}", dumbbell_chart(TEXT2SQL))
                 .replace("{{FINETUNE_CHART}}", finetune)
                 .replace("{{MEMORY_CHART}}", memory))
     (ROOT / "index.html").write_text(html)

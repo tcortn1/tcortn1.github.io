@@ -16,7 +16,7 @@
   --accent: #2a78d6; --accent-soft: #e8f1fc;
   --grid: #ecebe6;
   --s1: #2a78d6; --s2: #eb6834; --s3: #1baf7a; --s4: #eda100;
-  --bar: #86b6ef; --bar-hi: #1c5cab; --bar-muted: #c9c8c2;
+  --before: #8a8984; --bar: #86b6ef; --bar-hi: #1c5cab; --bar-muted: #c9c8c2;
   --badge-bg: #fff4dc; --badge-text: #7a5300;
 }
 @media (prefers-color-scheme: dark) {
@@ -27,7 +27,7 @@
     --accent: #5598e7; --accent-soft: #1b2a3d;
     --grid: #2a2a27;
     --s1: #3987e5; --s2: #d95926; --s3: #199e70; --s4: #c98500;
-    --bar: #256abf; --bar-hi: #6da7ec; --bar-muted: #4a4a46;
+    --before: #8a8984; --bar: #256abf; --bar-hi: #6da7ec; --bar-muted: #4a4a46;
     --badge-bg: #3a2e12; --badge-text: #f2c766;
   }
 }
@@ -38,7 +38,7 @@
   --accent: #5598e7; --accent-soft: #1b2a3d;
   --grid: #2a2a27;
   --s1: #3987e5; --s2: #d95926; --s3: #199e70; --s4: #c98500;
-  --bar: #256abf; --bar-hi: #6da7ec; --bar-muted: #4a4a46;
+  --before: #8a8984; --bar: #256abf; --bar-hi: #6da7ec; --bar-muted: #4a4a46;
   --badge-bg: #3a2e12; --badge-text: #f2c766;
 }
 * { box-sizing: border-box; }
@@ -100,6 +100,9 @@ figcaption { font-size: 13px; color: var(--text-muted); margin-top: 8px; }
 .line.s4 { stroke: var(--s4); } .dot.s4, .sw.s4 { fill: var(--s4); background: var(--s4); }
 .hover-pt { fill: transparent; }
 .hover-pt:hover { fill: var(--text-muted); fill-opacity: .25; }
+.dot.s-before, .sw.s-before { fill: var(--before); background: var(--before); }
+.dot.s-after, .sw.s-after { fill: var(--s1); background: var(--s1); }
+.link { stroke: var(--border-strong, var(--text-muted)); stroke-width: 2; opacity: .5; }
 .bar { fill: var(--bar); } .bar-hi { fill: var(--bar-hi); } .bar-muted { fill: var(--bar-muted); }
 .hit:hover .bar, .hit:hover .bar-hi, .hit:hover .bar-muted { opacity: .8; }
 .legend { display: flex; flex-wrap: wrap; gap: 6px 16px; font-size: 13px; color: var(--text-secondary); margin-bottom: 8px; }
@@ -161,7 +164,7 @@ footer { margin: 72px 0 48px; padding-top: 24px; border-top: 1px solid var(--bor
       <h3>Lending Genie Bench</h3>
       <div class="tag">Text2SQL · Databricks · DSPy · MLflow</div>
     </div>
-    <span class="badge">In progress</span>
+    <span class="badge">First results</span>
   </div>
   <p class="problem">Credit analysts ask questions like "which origination quarter defaults fastest?". Answering them
   correctly takes the right tables, the right metric definitions (PAR30, vintage, roll rate) and SQL that respects them.
@@ -173,22 +176,30 @@ footer { margin: 72px 0 48px; padding-top: 24px; border-top: 1px solid var(--bor
       <li><strong>Lakeflow pipeline</strong> (bronze → silver → gold) with business descriptions on every column, feeding
         both Genie and the agent.</li>
       <li><strong>DSPy agent</strong>: retrieve schema and definitions, generate SQL, enforce read-only guardrails,
-        self-correct on errors. Served through MLflow.</li>
-      <li><strong>Benchmark</strong>: 40 held-out questions scored on execution accuracy across 5 variants, including
-        DSPy-optimised prompts and Genie.</li>
+        self-correct on errors. Packaged as an MLflow agent, deployed with Asset Bundles.</li>
+      <li><strong>Benchmark</strong>: 40 questions scored on execution accuracy. The agent and Genie are each run with
+        and without a semantic layer (metric glossary + example queries).</li>
+      <li><strong>Error analysis loop</strong>: every miss is traced to its cause. Most were missing definitions
+        ("current book", time windows), not SQL skill, and fixing them took the agent from 75% to 90%.</li>
     </ul>
     <div class="stats-row">
-      <div class="stat"><div class="num">40</div><div class="lbl">gold questions, easy to hard</div></div>
-      <div class="stat"><div class="num">5</div><div class="lbl">variants compared, incl. Genie</div></div>
+      <div class="stat"><div class="num">+30 pp</div><div class="lbl">Genie accuracy gained from the semantic layer alone</div></div>
+      <div class="stat"><div class="num">90% vs 87.5%</div><div class="lbl">custom agent vs. Genie with the same semantic layer</div></div>
     </div>
   </div>
+  <figure>
+    {{TEXT2SQL_CHART}}
+    <figcaption>Execution accuracy on 40 credit-risk questions. The semantic layer moves both engines far more than the
+    choice of engine does. n=40, and the glossary was refined after a first error analysis, so absolute scores are
+    optimistic; both engines got the same glossary.</figcaption>
+  </figure>
   <figure>
     {{VINTAGE_CHART}}
     <figcaption>Cumulative default rate by months on book for four simulated origination cohorts, from the pipeline's
     <code>gold_vintage_curves</code> table. Cohorts exposed to the simulated 2025 construction downturn default faster.</figcaption>
   </figure>
   <div class="stack">Lakeflow Declarative Pipelines · Unity Catalog · DSPy · MLflow · Model Serving · Asset Bundles · DuckDB · sqlglot</div>
-  <div class="project-links"><span class="muted-link">Code and benchmark results are published once the first full run is complete</span></div>
+  <div class="project-links"><span class="muted-link">Code will be published after a rerun on a public workspace</span></div>
 </article>
 
 <article class="project" id="agentic-security-lab">
