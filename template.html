@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Tom Corten · Applied ML & GenAI</title>
-<meta name="description" content="Applied ML and GenAI engineer with an econometrics background. Projects in RAG, multi-agent systems, Text2SQL and fine-tuning, each with a measurable evaluation.">
+<meta name="description" content="Applied ML and GenAI engineer with an econometrics background. Projects in RAG, multi-agent systems and fine-tuning, each with a measurable evaluation.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
@@ -150,57 +150,13 @@ footer { margin: 72px 0 48px; padding-top: 24px; border-top: 1px solid var(--bor
     <!-- add LinkedIn / CV / email here -->
   </div>
   <ul class="skills">
-    <li>RAG</li><li>Multi-agent systems</li><li>Text2SQL</li><li>Fine-tuning (QLoRA, PEFT)</li>
+    <li>RAG</li><li>Multi-agent systems</li><li>Fine-tuning (QLoRA, PEFT)</li>
     <li>LLM evaluation</li><li>Databricks · MLflow · DSPy</li><li>Econometrics & credit risk</li>
   </ul>
 </header>
 
 <main>
 <h2>Selected work</h2>
-
-<article class="project" id="lending-genie-bench">
-  <div class="project-head">
-    <div>
-      <h3>Lending Genie Bench</h3>
-      <div class="tag">Text2SQL · Databricks · DSPy · MLflow</div>
-    </div>
-    <span class="badge">First results</span>
-  </div>
-  <p class="problem">Credit analysts ask questions like "which origination quarter defaults fastest?". Answering them
-  correctly takes the right tables, the right metric definitions (PAR30, vintage, roll rate) and SQL that respects them.
-  This project benchmarks Text2SQL approaches against Databricks Genie on a realistic lending portfolio.</p>
-  <div class="cols">
-    <ul>
-      <li><strong>Simulated lender with real statistical structure:</strong> a latent-logit default model with unobserved
-        heterogeneity, an arrears Markov chain and sector macro shocks. No random rows.</li>
-      <li><strong>Lakeflow pipeline</strong> (bronze → silver → gold) with business descriptions on every column, feeding
-        both Genie and the agent.</li>
-      <li><strong>DSPy agent</strong>: retrieve schema and definitions, generate SQL, enforce read-only guardrails,
-        self-correct on errors. Packaged as an MLflow agent, deployed with Asset Bundles.</li>
-      <li><strong>Benchmark</strong>: 40 questions scored on execution accuracy. The agent and Genie are each run with
-        and without a semantic layer (metric glossary + example queries).</li>
-      <li><strong>Error analysis loop</strong>: every miss is traced to its cause. Most were missing definitions
-        ("current book", time windows), not SQL skill, and fixing them took the agent from 75% to 90%.</li>
-    </ul>
-    <div class="stats-row">
-      <div class="stat"><div class="num">+30 pp</div><div class="lbl">Genie accuracy gained from the semantic layer alone</div></div>
-      <div class="stat"><div class="num">90% vs 87.5%</div><div class="lbl">custom agent vs. Genie with the same semantic layer</div></div>
-    </div>
-  </div>
-  <figure>
-    {{TEXT2SQL_CHART}}
-    <figcaption>Execution accuracy on 40 credit-risk questions. The semantic layer moves both engines far more than the
-    choice of engine does. n=40, and the glossary was refined after a first error analysis, so absolute scores are
-    optimistic; both engines got the same glossary.</figcaption>
-  </figure>
-  <figure>
-    {{VINTAGE_CHART}}
-    <figcaption>Cumulative default rate by months on book for four simulated origination cohorts, from the pipeline's
-    <code>gold_vintage_curves</code> table. Cohorts exposed to the simulated 2025 construction downturn default faster.</figcaption>
-  </figure>
-  <div class="stack">Lakeflow Declarative Pipelines · Unity Catalog · DSPy · MLflow · Model Serving · Asset Bundles · DuckDB · sqlglot</div>
-  <div class="project-links"><span class="muted-link">Code will be published after a rerun on a public workspace</span></div>
-</article>
 
 <article class="project" id="agentic-security-lab">
   <div class="project-head">
